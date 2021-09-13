@@ -8,6 +8,7 @@ import tensorflow as tf
 
 model_path = os.path.join('model', 'trained_model.h5')
 
+
 @st.cache
 def model_load():
     model = tf.keras.models.load_model(model_path)
