@@ -47,7 +47,6 @@ Markdown
 MarkupSafe==2.0.1
 matplotlib-inline==0.1.2
 mistune==0.8.4
-mkl-service==2.3.0
 multidict 
 nbclient==0.5.3
 nbconvert==6.1.0
