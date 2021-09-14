@@ -130,7 +130,7 @@ def cs_team():
         st.image(os.path.join('Images', 'hemanth.png'), use_column_width=True)
         st.write("Hemanth Reddy")
         # link = '[GitHub]('+git_url[1]+')'
-        link = '[![Foo](https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-github-1.png&r=255&g=255&b=255)](http://google.com.au/)'
+        link = '[![Github](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/836ba455-ccf7-4c6f-bb5b-893b69da10c2/git32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210914%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210914T231518Z&X-Amz-Expires=86400&X-Amz-Signature=13c8f37d3440e75780430dbabe18dea8e18207347d9a3ab896a8959f5f8bcbc2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22git32.png%22)](http://google.com.au/)'
         st.markdown(link, unsafe_allow_html=True)
         click2 = st.button('Github', key="2")
         if click2:
