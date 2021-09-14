@@ -170,7 +170,6 @@ def main():
     st.set_page_config(
         page_title='Image Colorization',
         layout="wide",
-        initial_sidebar_state="expanded",
     )
 
     current_page = cs_sidebar()
