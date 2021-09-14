@@ -61,12 +61,12 @@ def cs_image_colorization():
     gamma = 1.0
 
     Image = st.file_uploader('Upload grayscale image here', type=['jpg', 'jpeg', 'png'])
-    my_expander = st.beta_expander(label='🙋 Upload help')
+    my_expander = st.expander(label='🙋 Upload help')
     with my_expander:
         st.markdown('Upload the grayscale image')
         st.markdown('Filetype to upload : **JPG, JPEG, PNG**')
     if Image is not None:
-        col1, col2 = st.beta_columns(2)
+        col1, col2 = st.columns(2)
         Image = Image.read()
         Image = tf.image.decode_image(Image, channels=3).numpy()
         Image = adjust_gamma(Image, gamma=gamma)
@@ -97,7 +97,7 @@ def cs_documentation():
 def cs_team():
     st.markdown("<h1 style='text-align: center; color: white;'>Team</h1>",
                 unsafe_allow_html=True)
-    col1, col2, col3, col4, col5 = st.beta_columns(5)
+    col1, col2, col3, col4, col5 = st.columns(5)
 
     name = ["Aditya Pujari",
             "Hemanth Reddy",
