@@ -129,6 +129,9 @@ def cs_team():
     with col2:
         st.image(os.path.join('Images', 'hemanth.png'), use_column_width=True)
         st.write("Hemanth Reddy")
+        # link = '[GitHub]('+git_url[1]+')'
+        link = '[![Foo](https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-github-1.png&r=255&g=255&b=255)](http://google.com.au/)'
+        st.markdown(link, unsafe_allow_html=True)
         click2 = st.button('Github', key="2")
         if click2:
             webbrowser.open_new_tab(git_url[1])
