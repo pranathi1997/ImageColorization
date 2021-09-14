@@ -56,6 +56,7 @@ def cs_image_colorization():
 
     # comic_model = model_load()
 
+
     outputsize = 512
     gamma = 1.0
 
