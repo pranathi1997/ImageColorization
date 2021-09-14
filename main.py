@@ -1,5 +1,4 @@
 import os
-import webbrowser
 
 import cv2
 import numpy as np
@@ -56,7 +55,6 @@ def cs_image_colorization():
 
     # comic_model = model_load()
 
-
     outputsize = 512
     gamma = 1.0
 
@@ -99,6 +97,9 @@ def cs_team():
                 unsafe_allow_html=True)
     col1, col2, col3, col4, col5 = st.columns(5)
 
+    linkedin_logo = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/156bea72-256c-475a-81bd-7bc8d43a0f65/linkedin-32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210914%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210914T231855Z&X-Amz-Expires=86400&X-Amz-Signature=6fe9619640926776f49ecf2ce9eb610fe108135cf15b273950f387cc8c81b68a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22linkedin-32.png%22"
+    github_logo = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b3e24582-e4b1-4f82-88f5-ec2b4db3d4ab/git32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210914%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210914T231947Z&X-Amz-Expires=86400&X-Amz-Signature=d73bbbaf5f625551337ae685994e9dc650f694c5ca8eea6bcdb576394f3d7384&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22git32.png%22"
+
     name = ["Aditya Pujari",
             "Hemanth Reddy",
             "Brinda Potluri",
@@ -119,52 +120,39 @@ def cs_team():
 
     with col1:
         st.image(os.path.join('Images', 'aditya.png'), use_column_width=True)
-        st.write(name[0])
-        click1 = st.button('Github', key="1")
-        if click1:
-            webbrowser.open_new_tab(git_url[0])
-        click6 = st.button('Linkedin', key="6")
-        if click6:
-            webbrowser.open_new_tab(linkedlin_url[0])
+        st.markdown('### ' + name[0])
+        github_link = '[Github](' + git_url[0] + ')'
+        st.markdown(github_link, unsafe_allow_html=True)
+        linkedin_link = '[Linkedin](' + linkedlin_url[0] + ')'
+        st.markdown(linkedin_link, unsafe_allow_html=True)
     with col2:
         st.image(os.path.join('Images', 'hemanth.png'), use_column_width=True)
-        st.write("Hemanth Reddy")
-        # link = '[GitHub]('+git_url[1]+')'
-        link = '[![Github](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/836ba455-ccf7-4c6f-bb5b-893b69da10c2/git32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210914%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210914T231518Z&X-Amz-Expires=86400&X-Amz-Signature=13c8f37d3440e75780430dbabe18dea8e18207347d9a3ab896a8959f5f8bcbc2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22git32.png%22)](http://google.com.au/)'
-        st.markdown(link, unsafe_allow_html=True)
-        click2 = st.button('Github', key="2")
-        if click2:
-            webbrowser.open_new_tab(git_url[1])
-        click7 = st.button('Linkedin', key="7")
-        if click7:
-            webbrowser.open_new_tab(linkedlin_url[1])
+        st.markdown('### ' + name[1])
+        github_link = '[Github](' + git_url[1] + ')'
+        st.markdown(github_link, unsafe_allow_html=True)
+        linkedin_link = '[Linkedin](' + linkedlin_url[1] + ')'
+        st.markdown(linkedin_link, unsafe_allow_html=True)
     with col3:
         st.image(os.path.join('Images', 'brinda.png'), use_column_width=True)
-        st.write("Brinda Potluri")
-        click3 = st.button('Github', key="3")
-        if click3:
-            webbrowser.open_new_tab(git_url[2])
-        click8 = st.button('Linkedin', key="8")
-        if click8:
-            webbrowser.open_new_tab(linkedlin_url[2])
+        st.markdown('### ' + name[2])
+        github_link = '[Github](' + git_url[2] + ')'
+        st.markdown(github_link, unsafe_allow_html=True)
+        linkedin_link = '[Linkedin](' + linkedlin_url[2] + ')'
+        st.markdown(linkedin_link, unsafe_allow_html=True)
     with col4:
         st.image(os.path.join('Images', 'pranathi.png'), use_column_width=True)
-        st.write("Pranathi Karedla")
-        click4 = st.button('Github', key="4")
-        if click4:
-            webbrowser.open_new_tab(git_url[3])
-        click9 = st.button('Linkedin', key="9")
-        if click9:
-            webbrowser.open_new_tab(linkedlin_url[3])
+        st.markdown('### ' + name[3])
+        github_link = '[Github](' + git_url[3] + ')'
+        st.markdown(github_link, unsafe_allow_html=True)
+        linkedin_link = '[Linkedin](' + linkedlin_url[3] + ')'
+        st.markdown(linkedin_link, unsafe_allow_html=True)
     with col5:
         st.image(os.path.join('Images', 'praveen.png'), use_column_width=True)
-        st.write("Praveen Kumar")
-        click5 = st.button('Github', key="5")
-        if click5:
-            webbrowser.open_new_tab(git_url[4])
-        click10 = st.button('Linkedin', key="10")
-        if click10:
-            webbrowser.open_new_tab(linkedlin_url[4])
+        st.markdown('### ' + name[4])
+        github_link = '[Github](' + git_url[4] + ')'
+        st.markdown(github_link, unsafe_allow_html=True)
+        linkedin_link = '[Linkedin](' + linkedlin_url[4] + ')'
+        st.markdown(linkedin_link, unsafe_allow_html=True)
 
     return None
 
