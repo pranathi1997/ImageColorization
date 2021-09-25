@@ -1,46 +1,56 @@
 import os
 
-import cv2
 import numpy as np
 import streamlit as st
 import tensorflow as tf
+from skimage import color
 
 model_path = os.path.join('model', 'trained_model.h5')
 
-
-@st.cache
+@st.cache(allow_output_mutation=True)
 def model_load():
     model = tf.keras.models.load_model(model_path)
     return model
 
 
-def adjust_gamma(image, gamma=1.0):
-    invGamma = 1.0 / gamma
-    table = np.array([((i / 255.0) ** invGamma) * 255
-                      for i in np.arange(0, 256)]).astype("uint8")
-
-    return cv2.LUT(image, table)
-
-
-def loadtest(image):
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = tf.convert_to_tensor(image, dtype=tf.float32)
-    image = (tf.cast(image, tf.float32) / 255.0 * 2) - 1
-    image = tf.image.resize(image,
-                            [256, 256],
-                            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    image = tf.expand_dims(image, 0)
-    return image
+# def read_img(file, size=(256, 256)):
+#     '''
+#     reads the images and transforms them to the desired size
+#     '''
+#     img = image.load_img(file, target_size=size)
+#     img = image.img_to_array(img)
+#     return img
 
 
-def loadframe(image):
-    image = tf.convert_to_tensor(image, dtype=tf.float32)
-    image = (tf.cast(image, tf.float32) / 255.0 * 2) - 1
-    image = tf.image.resize(image,
-                            [256, 256],
-                            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    image = tf.expand_dims(image, 0)
-    return image
+def rgb_to_lab(img, l=False, ab=False):
+    """
+    Takes in RGB channels in range 0-255 and outputs L or AB channels in range -1 to 1
+    """
+    img = img / 255
+    l_chan = color.rgb2lab(img)[:, :, 0]
+    l_chan = l_chan / 50 - 1
+    l_chan = l_chan[..., np.newaxis]
+
+    ab_chan = color.rgb2lab(img)[:, :, 1:]
+    ab_chan = (ab_chan + 128) / 255 * 2 - 1
+    if l:
+        return l_chan
+    else:
+        return ab_chan
+
+
+def lab_to_rgb(img):
+    """
+    Takes in LAB channels in range -1 to 1 and out puts RGB chanels in range 0-255
+    """
+    new_img = np.zeros((256, 256, 3))
+    for i in range(len(img)):
+        for j in range(len(img[i])):
+            pix = img[i, j]
+            new_img[i, j] = [(pix[0] + 1) * 50, (pix[1] + 1) / 2 * 255 - 128, (pix[2] + 1) / 2 * 255 - 128]
+    new_img = color.lab2rgb(new_img) * 255
+    new_img = new_img.astype('uint8')
+    return new_img
 
 
 def cs_sidebar():
@@ -53,10 +63,7 @@ def cs_image_colorization():
     st.markdown("<h1 style='text-align: center; color: white;'>Image Colorization</h1>",
                 unsafe_allow_html=True)
 
-    # comic_model = model_load()
 
-    outputsize = 512
-    gamma = 1.0
 
     Image = st.file_uploader('Upload grayscale image here', type=['jpg', 'jpeg', 'png'])
     my_expander = st.expander(label='🙋 Upload help')
@@ -67,21 +74,19 @@ def cs_image_colorization():
         col1, col2 = st.columns(2)
         Image = Image.read()
         Image = tf.image.decode_image(Image, channels=3).numpy()
-        Image = adjust_gamma(Image, gamma=gamma)
+
         with col1:
             col1.subheader("Uploaded Image")
             st.image(Image)
-        input_image = loadtest(Image)
-        # prediction = comic_model(input_image, training=False)
-        # prediction = tf.squeeze(prediction, 0)
-        # prediction = prediction * 0.5 + 0.5
-        # prediction = tf.image.resize(prediction,
-        #                              [outputsize, outputsize],
-        #                              method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-        # prediction = prediction.numpy()
+            model = model_load()
+            Image = tf.image.resize(Image,[256, 256],method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+            l_channel = rgb_to_lab(Image, l=True)
+            fake_ab = model.predict(l_channel.reshape(1, 256, 256, 1))
+            fake = np.dstack((l_channel, fake_ab.reshape(256, 256, 2)))
+            fake = lab_to_rgb(fake).astype('int64')
         with col2:
             col2.subheader("Colorized Image")
-            # st.image(prediction)
+            st.image(fake)
 
     return None
 
