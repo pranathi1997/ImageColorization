@@ -2,3 +2,4 @@ opencv-python-headless
 numpy
 streamlit
 tensorflow-cpu==2.3.0
+scikit-image==0.18.3
