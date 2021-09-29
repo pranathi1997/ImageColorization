@@ -1,5 +1,6 @@
 import os
 
+import cv2
 import numpy as np
 import streamlit as st
 import tensorflow as tf
@@ -7,20 +8,11 @@ from skimage import color
 
 model_path = os.path.join('model', 'trained_model.h5')
 
+
 @st.cache(allow_output_mutation=True)
 def model_load():
     model = tf.keras.models.load_model(model_path)
     return model
-
-
-# def read_img(file, size=(256, 256)):
-#     '''
-#     reads the images and transforms them to the desired size
-#     '''
-#     img = image.load_img(file, target_size=size)
-#     img = image.img_to_array(img)
-#     return img
-
 
 def rgb_to_lab(img, l=False, ab=False):
     """
@@ -38,7 +30,6 @@ def rgb_to_lab(img, l=False, ab=False):
     else:
         return ab_chan
 
-
 def lab_to_rgb(img):
     """
     Takes in LAB channels in range -1 to 1 and out puts RGB chanels in range 0-255
@@ -52,18 +43,14 @@ def lab_to_rgb(img):
     new_img = new_img.astype('uint8')
     return new_img
 
-
 def cs_sidebar():
     st.sidebar.header('Navigation')
     current_page = st.sidebar.radio("", ["Image Colorization", "Documentation", "Team"])
     return current_page
 
-
 def cs_image_colorization():
     st.markdown("<h1 style='text-align: center; color: white;'>Image Colorization</h1>",
                 unsafe_allow_html=True)
-
-
 
     Image = st.file_uploader('Upload grayscale image here', type=['jpg', 'jpeg', 'png'])
     my_expander = st.expander(label='🙋 Upload help')
@@ -74,28 +61,28 @@ def cs_image_colorization():
         col1, col2 = st.columns(2)
         Image = Image.read()
         Image = tf.image.decode_image(Image, channels=3).numpy()
-
+        height = Image.shape[0]
+        width = Image.shape[1]
         with col1:
             col1.subheader("Uploaded Image")
             st.image(Image)
             model = model_load()
-            Image = tf.image.resize(Image,[256, 256],method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+            Image = tf.image.resize(Image, [256, 256], method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
             l_channel = rgb_to_lab(Image, l=True)
             fake_ab = model.predict(l_channel.reshape(1, 256, 256, 1))
             fake = np.dstack((l_channel, fake_ab.reshape(256, 256, 2)))
-            fake = lab_to_rgb(fake).astype('int64')
+            fake =  lab_to_rgb(fake)
+            fake = cv2.resize(fake, (width,height), interpolation = cv2.INTER_AREA)
         with col2:
             col2.subheader("Colorized Image")
             st.image(fake)
 
     return None
 
-
 def cs_documentation():
     st.markdown("<h1 style='text-align: center; color: white;'>Documentation</h1>",
                 unsafe_allow_html=True)
     return None
-
 
 def cs_team():
     st.markdown("<h1 style='text-align: center; color: white;'>Team</h1>",
@@ -161,7 +148,6 @@ def cs_team():
 
     return None
 
-
 def main():
     st.set_page_config(
         page_title='Image Colorization',
@@ -176,7 +162,6 @@ def main():
     else:
         cs_team()
     return None
-
 
 if __name__ == '__main__':
     main()
