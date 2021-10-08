@@ -14,6 +14,7 @@ def model_load():
     model = tf.keras.models.load_model(model_path)
     return model
 
+
 def rgb_to_lab(img, l=False, ab=False):
     """
     Takes in RGB channels in range 0-255 and outputs L or AB channels in range -1 to 1
@@ -30,6 +31,7 @@ def rgb_to_lab(img, l=False, ab=False):
     else:
         return ab_chan
 
+
 def lab_to_rgb(img):
     """
     Takes in LAB channels in range -1 to 1 and out puts RGB chanels in range 0-255
@@ -43,10 +45,12 @@ def lab_to_rgb(img):
     new_img = new_img.astype('uint8')
     return new_img
 
+
 def cs_sidebar():
     st.sidebar.header('Navigation')
-    current_page = st.sidebar.radio("", ["Image Colorization", "Documentation", "Team"])
+    current_page = st.sidebar.radio("", ["Image Colorization", "Team"])
     return current_page
+
 
 def cs_image_colorization():
     st.markdown("<h1 style='text-align: center; color: white;'>Image Colorization</h1>",
@@ -71,26 +75,19 @@ def cs_image_colorization():
             l_channel = rgb_to_lab(Image, l=True)
             fake_ab = model.predict(l_channel.reshape(1, 256, 256, 1))
             fake = np.dstack((l_channel, fake_ab.reshape(256, 256, 2)))
-            fake =  lab_to_rgb(fake)
-            fake = cv2.resize(fake, (width,height), interpolation = cv2.INTER_AREA)
+            fake = lab_to_rgb(fake)
+            fake = cv2.resize(fake, (width, height), interpolation=cv2.INTER_AREA)
         with col2:
             col2.subheader("Colorized Image")
             st.image(fake)
 
     return None
 
-def cs_documentation():
-    st.markdown("<h1 style='text-align: center; color: white;'>Documentation</h1>",
-                unsafe_allow_html=True)
-    return None
 
 def cs_team():
     st.markdown("<h1 style='text-align: center; color: white;'>Team</h1>",
                 unsafe_allow_html=True)
     col1, col2, col3, col4, col5 = st.columns(5)
-
-    linkedin_logo = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/156bea72-256c-475a-81bd-7bc8d43a0f65/linkedin-32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210914%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210914T231855Z&X-Amz-Expires=86400&X-Amz-Signature=6fe9619640926776f49ecf2ce9eb610fe108135cf15b273950f387cc8c81b68a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22linkedin-32.png%22"
-    github_logo = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b3e24582-e4b1-4f82-88f5-ec2b4db3d4ab/git32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210914%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210914T231947Z&X-Amz-Expires=86400&X-Amz-Signature=d73bbbaf5f625551337ae685994e9dc650f694c5ca8eea6bcdb576394f3d7384&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22git32.png%22"
 
     name = ["Aditya Pujari",
             "Hemanth Reddy",
@@ -148,6 +145,7 @@ def cs_team():
 
     return None
 
+
 def main():
     st.set_page_config(
         page_title='Image Colorization',
@@ -157,11 +155,10 @@ def main():
     current_page = cs_sidebar()
     if (current_page == "Image Colorization"):
         cs_image_colorization()
-    elif (current_page == "Documentation"):
-        cs_documentation()
     else:
         cs_team()
     return None
+
 
 if __name__ == '__main__':
     main()
